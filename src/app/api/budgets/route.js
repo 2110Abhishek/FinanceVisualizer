@@ -7,12 +7,14 @@ export async function GET() {
     const budgets = await Budget.find();
     return Response.json(budgets);
   } catch (err) {
+    console.error('GET /budgets error:', err);
     return new Response(JSON.stringify({ error: 'Internal Server Error' }), { status: 500 });
   }
 }
 
 export async function POST(req) {
   try {
+    await connectDB();
     const body = await req.json();
     const { category, amount } = body;
 
@@ -20,15 +22,11 @@ export async function POST(req) {
       return new Response(JSON.stringify({ error: 'Invalid input' }), { status: 400 });
     }
 
-    // save to DB (pseudo)
-    await connectDB();
     await Budget.create({ category, amount });
-
 
     return new Response(JSON.stringify({ success: true }), { status: 200 });
   } catch (err) {
-    console.error("Budget API error:", err);
+    console.error("POST /budgets error:", err);
     return new Response(JSON.stringify({ error: 'Internal Server Error' }), { status: 500 });
   }
 }
-
