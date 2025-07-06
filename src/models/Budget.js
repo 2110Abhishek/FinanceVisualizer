@@ -1,4 +1,4 @@
-// src/models/Budget.js
+// /models/Budget.js
 import mongoose from 'mongoose';
 
 const BudgetSchema = new mongoose.Schema({
@@ -11,7 +11,7 @@ const BudgetSchema = new mongoose.Schema({
   amount: {
     type: Number,
     required: true,
-  }
+  },
 });
 
-export default mongoose.models.Budget || mongoose.model("Budget", BudgetSchema);
+export default mongoose.models.Budget || mongoose.model('Budget', BudgetSchema);

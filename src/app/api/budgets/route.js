@@ -1,14 +1,16 @@
+// /app/api/budgets/route.js
 import { connectDB } from '@/lib/mongodb';
 import Budget from '@/models/Budget';
+import { NextResponse } from 'next/server';
 
 export async function GET() {
   try {
     await connectDB();
     const budgets = await Budget.find();
-    return Response.json(budgets);
+    return NextResponse.json(budgets);
   } catch (err) {
     console.error('GET /budgets error:', err);
-    return new Response(JSON.stringify({ error: 'Internal Server Error' }), { status: 500 });
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
 
@@ -19,14 +21,18 @@ export async function POST(req) {
     const { category, amount } = body;
 
     if (!category || typeof amount !== 'number') {
-      return new Response(JSON.stringify({ error: 'Invalid input' }), { status: 400 });
+      return NextResponse.json({ error: 'Invalid input' }, { status: 400 });
     }
 
-    await Budget.create({ category, amount });
+    await Budget.findOneAndUpdate(
+      { category },
+      { category, amount },
+      { upsert: true, new: true }
+    );
 
-    return new Response(JSON.stringify({ success: true }), { status: 200 });
+    return NextResponse.json({ success: true });
   } catch (err) {
-    console.error("POST /budgets error:", err);
-    return new Response(JSON.stringify({ error: 'Internal Server Error' }), { status: 500 });
+    console.error('POST /budgets error:', err);
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
