@@ -13,18 +13,20 @@ export async function GET() {
 
 export async function POST(req) {
   try {
-    await connectDB();
     const body = await req.json();
     const { category, amount } = body;
 
-    const budget = await Budget.findOneAndUpdate(
-      { category },
-      { $set: { amount } },
-      { upsert: true, new: true }
-    );
+    if (!category || typeof amount !== 'number') {
+      return new Response(JSON.stringify({ error: 'Invalid input' }), { status: 400 });
+    }
 
-    return Response.json(budget);
+    // save to DB (pseudo)
+    await db.collection('budgets').insertOne({ category, amount });
+
+    return new Response(JSON.stringify({ success: true }), { status: 200 });
   } catch (err) {
-    return new Response(JSON.stringify({ error: 'Failed to set budget' }), { status: 500 });
+    console.error("Budget API error:", err);
+    return new Response(JSON.stringify({ error: 'Internal Server Error' }), { status: 500 });
   }
 }
+
