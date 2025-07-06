@@ -1,14 +1,16 @@
 'use client';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
-export default function MonthlyChart({ transactions }) {
+export default function MonthlyChart({ transactions = [] }) {
   const monthlyData = {};
 
-  transactions.forEach(({ amount, date }) => {
-    const month = new Date(date).toLocaleString('default', { month: 'short' });
-    if (!monthlyData[month]) monthlyData[month] = 0;
-    monthlyData[month] += amount;
-  });
+  if (Array.isArray(transactions)) {
+    transactions.forEach(({ amount, date }) => {
+      const month = new Date(date).toLocaleString('default', { month: 'short' });
+      if (!monthlyData[month]) monthlyData[month] = 0;
+      monthlyData[month] += amount;
+    });
+  }
 
   const data = Object.keys(monthlyData).map((month) => ({
     month,

@@ -2,12 +2,14 @@
 import { Card } from "@/components/ui/card";
 import { motion } from "framer-motion";
 
-export default function TransactionList({ data, onDelete }) {
+export default function TransactionList({ data = [], onDelete }) {
+  const safeData = Array.isArray(data) ? data : [];
+
   return (
     <Card className="mt-4">
       <h3 className="text-lg font-semibold mb-3">📋 All Transactions</h3>
       <ul className="space-y-3">
-        {data.map((tx) => (
+        {safeData.map((tx) => (
           <motion.li
             key={tx._id}
             initial={{ opacity: 0, y: 10 }}

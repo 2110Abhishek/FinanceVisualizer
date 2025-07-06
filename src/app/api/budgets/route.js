@@ -21,7 +21,9 @@ export async function POST(req) {
     }
 
     // save to DB (pseudo)
-    await db.collection('budgets').insertOne({ category, amount });
+    await connectDB();
+    await Budget.create({ category, amount });
+
 
     return new Response(JSON.stringify({ success: true }), { status: 200 });
   } catch (err) {

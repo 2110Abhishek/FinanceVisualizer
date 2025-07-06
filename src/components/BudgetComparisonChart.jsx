@@ -1,18 +1,20 @@
 'use client';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend } from 'recharts';
 
-export default function BudgetComparisonChart({ transactions, budgets }) {
+export default function BudgetComparisonChart({ transactions = [], budgets = [] }) {
   const categoryTotals = {};
 
-  transactions.forEach(({ amount, category }) => {
-    categoryTotals[category] = (categoryTotals[category] || 0) + amount;
-  });
+  if (Array.isArray(transactions)) {
+    transactions.forEach(({ amount, category }) => {
+      categoryTotals[category] = (categoryTotals[category] || 0) + amount;
+    });
+  }
 
-  const data = budgets.map((b) => ({
+  const data = Array.isArray(budgets) ? budgets.map((b) => ({
     category: b.category,
     Budgeted: b.amount,
     Spent: categoryTotals[b.category] || 0,
-  }));
+  })) : [];
 
   return (
     <BarChart width={600} height={300} data={data}>

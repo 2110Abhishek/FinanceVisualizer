@@ -3,13 +3,15 @@ import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#A28DFF', '#F06292', '#BDBDBD'];
 
-export default function CategoryPieChart({ transactions }) {
+export default function CategoryPieChart({ transactions = [] }) {
   const categoryData = {};
 
-  transactions.forEach(({ amount, category }) => {
-    if (!categoryData[category]) categoryData[category] = 0;
-    categoryData[category] += amount;
-  });
+  if (Array.isArray(transactions)) {
+    transactions.forEach(({ amount, category }) => {
+      if (!categoryData[category]) categoryData[category] = 0;
+      categoryData[category] += amount;
+    });
+  }
 
   const data = Object.entries(categoryData).map(([key, value]) => ({
     name: key,
