@@ -1,5 +1,5 @@
 'use client';
-import { Card } from "@/components/ui/Card";
+import { Card } from "@/components/ui/card";
 import { motion } from "framer-motion";
 
 export default function TransactionList({ data, onDelete }) {

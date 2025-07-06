@@ -1,4 +1,6 @@
 'use client';
+import { Card } from '@/components/ui/card';
+
 export default function DashboardCards({ transactions }) {
   const total = transactions.reduce((acc, tx) => acc + tx.amount, 0);
   const latest = [...transactions].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 3);
